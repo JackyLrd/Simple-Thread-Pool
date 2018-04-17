@@ -45,7 +45,7 @@ void Thread::add_job(Job* job)
 
 void Thread::run()
 {
-	pthread_create(&tid, NULL, start_rountine, this);
+	pthread_create(&tid, NULL, start_routine, this);
 }
 
 const int Thread::get_state()
@@ -68,7 +68,7 @@ void Thread::set_abort()
 	is_abort = true;
 }
 
-void* Thread::start_rountine(void* args)
+void* Thread::start_routine(void* args)
 {
 	Thread* thread = (Thread*)(args);
 	thread->execute();

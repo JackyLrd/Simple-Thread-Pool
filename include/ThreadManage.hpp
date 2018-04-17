@@ -1,3 +1,9 @@
+/*
+ * @Author: JackyLrd 
+ * @Date: 2018-04-18 03:28:21 
+ * @Last Modified by:   JackyLrd 
+ * @Last Modified time: 2018-04-18 03:28:21 
+ */
 #ifndef ThreadManage_H_
 #define ThreadManage_H_
 

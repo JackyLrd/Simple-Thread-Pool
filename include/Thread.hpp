@@ -1,3 +1,9 @@
+/*
+ * @Author: JackyLrd 
+ * @Date: 2018-04-18 03:28:35 
+ * @Last Modified by:   JackyLrd 
+ * @Last Modified time: 2018-04-18 03:28:35 
+ */
 #ifndef Thread_H_
 #define Thread_H_
 #include <pthread.h>
@@ -26,7 +32,7 @@ class Thread
 		const int get_job_count();
 		const pthread_t get_tid();
 		void set_abort();
-		static void* start_rountine(void* args);
+		static void* start_routine(void* args);
 		void execute();
 	private:
 		pthread_mutex_t queue_lock;
