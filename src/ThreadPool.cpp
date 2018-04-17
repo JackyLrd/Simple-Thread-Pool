@@ -26,21 +26,13 @@ void ThreadPool::terminate()
 	for (unsigned long long i = 0; i < max_thread_num; ++i)
 	{
 		threads[i].set_abort();
-		//printf("after set: %d\n", threads[i].get_state());
 		threads[i].signal();
 	}
 
-	unsigned long long i;
-	while (1)
+	
+	for (unsigned long long i = 0; i < max_thread_num; ++i)
 	{
-		for (i = 0; i < max_thread_num; ++i)
-		{
-			if (threads[i].get_state() != EXIT)
-				break;
-		}
-		// printf("%u\n", i);
-		if (i == max_thread_num)
-			break;
+		pthread_join(threads[i].get_tid(), NULL);
 	}
 	
 	printf("all threads exit.\n");
