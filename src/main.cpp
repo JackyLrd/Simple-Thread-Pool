@@ -9,7 +9,7 @@ class MyJob: public Job
 		void run()
 		{
 			int ret = a + b;
-			// printf("result: %d\n", ret);
+			//printf("result: %d\n", ret);
 		}
 		int a;
 		int b;
@@ -18,13 +18,11 @@ class MyJob: public Job
 int main()
 {
 	auto start = clock();
-	auto manager = ThreadManage(1);
-	for (int i = 0; i < 1000000; ++i)
+	auto manager = ThreadManage(4);
+	for (int i = 0; i < 100000; ++i)
 	{
-		// printf("%d\n", i);
 		manager.run(new MyJob(rand() % 100, rand() % 100));
 	}
-	manager.show_thread_state();
 	manager.terminate();
 	auto end = clock();
 	printf("running time is: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);

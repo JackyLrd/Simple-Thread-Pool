@@ -39,8 +39,8 @@ void Thread::add_job(Job* job)
 {
 	lock();
 	job_queue.push_back(job);
-	signal();
 	unlock();
+	signal();
 }
 
 void Thread::run()
@@ -81,20 +81,21 @@ void Thread::execute()
 	while (1)
 	{
 		lock();
-		if (state == IDLE)
-			state = WAITING;
-		printf("thread 0x%lu is waiting for a job.\n", tid);
-		while (job_queue.empty())
+		assert(state == IDLE);
+		state = WAITING;
+		// printf("thread 0x%lu is waiting for a job.\n", tid);
+		while (job_queue.empty() && !is_abort)
 		{
-			if (is_abort)
-				break;
 			wait();
 		}
 
-		if (is_abort)
+		if (job_queue.empty() && is_abort)
+		{
+			unlock();
 			break;
+		}
 
-		printf("thread 0x%lu starts working.\n", tid);
+		// printf("thread 0x%lu starts working.\n", tid);
 		assert(!job_queue.empty());
 
 		Job* job = job_queue.front();
@@ -102,16 +103,16 @@ void Thread::execute()
 		
 		unlock();
 
-		if (state == WAITING)
-			state = WORKING;
+		assert(state == WAITING);
+		state = WORKING;
 
 		job->run();
-		printf("thread 0x%lu's job finished.\n", tid);
+		// printf("thread 0x%lu's job finished.\n", tid);
 		++job_count;
 		delete job;
 
-		if (state == WORKING)
-			state = IDLE;
+		assert(state == WORKING);
+		state = IDLE;
 	}
 
 	state = EXIT;

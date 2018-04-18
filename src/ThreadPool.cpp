@@ -15,8 +15,8 @@ ThreadPool::ThreadPool(int thread_num)
 
 void ThreadPool::add_job(Job* job)
 {
-	int tid = rand() % max_thread_num;
-	threads[tid].add_job(job);
+	int id = rand() % max_thread_num;
+	threads[id].add_job(job);
 }
 
 void ThreadPool::terminate()
@@ -27,15 +27,11 @@ void ThreadPool::terminate()
 	{
 		threads[i].set_abort();
 		threads[i].signal();
-	}
-
-	
-	for (unsigned long long i = 0; i < max_thread_num; ++i)
-	{
 		pthread_join(threads[i].get_tid(), NULL);
 	}
 	
 	printf("all threads exit.\n");
+	show_thread_state();
 
 	if (threads)
 		delete[] threads;
