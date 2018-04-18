@@ -29,4 +29,5 @@ ThreadManage::~ThreadManage()
 {
 	if (pool)
 		delete pool;
+	pool = NULL;
 }

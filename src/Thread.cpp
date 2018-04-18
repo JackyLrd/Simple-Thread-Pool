@@ -125,6 +125,7 @@ void Thread::execute()
 		// printf("thread %d's job finished.\n", thread_id);
 		++job_count;
 		delete job;
+		job = NULL;
 
 		assert(state == THREAD_WORKING);
 		state = THREAD_IDLE;

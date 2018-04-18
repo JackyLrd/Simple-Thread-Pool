@@ -38,6 +38,7 @@ class ThreadPool
 		Thread* threads;
 		int max_thread_num;
 		int state;
+		int ptr;
 };
 
 #endif

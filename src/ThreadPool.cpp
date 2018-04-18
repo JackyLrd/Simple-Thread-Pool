@@ -3,8 +3,9 @@
 // initial all threads
 ThreadPool::ThreadPool(int thread_num)
 {
-	state = POOL_INIT;
 	max_thread_num = thread_num;
+	state = POOL_INIT;
+	ptr = 0;
 	threads = new Thread[thread_num];
 	for (int i = 0; i < max_thread_num; ++i)
 	{
@@ -19,6 +20,10 @@ void ThreadPool::add_job(Job* job)
 	// randomly choose a thread
 	int id = rand() % max_thread_num;
 	threads[id].add_job(job);
+
+	// use round-robin
+	// threads[ptr].add_job(job);
+	// ptr = (ptr == max_thread_num - 1) ? 0 : ptr + 1;
 }
 
 void ThreadPool::terminate()
@@ -39,6 +44,7 @@ void ThreadPool::terminate()
 
 	if (threads)
 		delete[] threads;
+	threads = NULL;
 
 	state = POOL_TERMINATED;
 }
