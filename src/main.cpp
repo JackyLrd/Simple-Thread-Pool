@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <ctime>
 
+// example job
 class MyJob: public Job
 {
 	public:

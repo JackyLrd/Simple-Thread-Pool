@@ -7,6 +7,7 @@
 #ifndef Job_H_
 #define Job_H_
 
+// abstract class, inherit it to create your own job, rewrite the run function
 class Job
 {
 	public:

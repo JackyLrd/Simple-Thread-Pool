@@ -13,10 +13,15 @@
 class ThreadManage
 {
 	public:
+		// default thread num is 10
 		ThreadManage();
+		// set your own thread num
 		ThreadManage(int num);
+		// put in a job and run
 		void run(Job* job);
+		// show the jobs num finished by each thread
 		void show_thread_state();
+		// shut down the pool
 		void terminate();
 		virtual ~ThreadManage();
 	private:

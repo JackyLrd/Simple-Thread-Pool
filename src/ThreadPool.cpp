@@ -1,5 +1,6 @@
 #include "../include/ThreadPool.hpp"
 
+// initial all threads
 ThreadPool::ThreadPool(int thread_num)
 {
 	state = POOL_INIT;
@@ -15,6 +16,7 @@ ThreadPool::ThreadPool(int thread_num)
 
 void ThreadPool::add_job(Job* job)
 {
+	// randomly choose a thread
 	int id = rand() % max_thread_num;
 	threads[id].add_job(job);
 }
@@ -23,6 +25,7 @@ void ThreadPool::terminate()
 {
 	state = POOL_TERMINATING;
 
+	// wait until all jobs are done
 	for (unsigned long long i = 0; i < max_thread_num; ++i)
 	{
 		threads[i].set_abort();
@@ -31,6 +34,7 @@ void ThreadPool::terminate()
 	}
 	
 	printf("all threads exit.\n");
+	// show thread state
 	show_thread_state();
 
 	if (threads)
@@ -44,8 +48,10 @@ void ThreadPool::show_thread_state()
 	int count = 0;
 	for (int i = 0; i < max_thread_num; ++i)
 	{
+		// show the number of jobs done by each thread
 		count += threads[i].get_job_count();
 		printf("thread %d finished %d jobs\n", threads[i].get_id(), threads[i].get_job_count());
 	}
+	// total jobs done
 	printf("%d jobs finished.\n", count);
 }

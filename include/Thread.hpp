@@ -12,6 +12,7 @@
 #include <cstdio>
 #include "Job.hpp"
 
+// thread state
 const int THREAD_IDLE = 0;
 const int THREAD_WORKING = 1;
 const int THREAD_WAITING = 2;
@@ -21,19 +22,25 @@ class Thread
 {
 	public:
 		Thread();
+		// getters and setters
+		void set_abort();
 		void set_id(int id);
 		const int get_id();
 		const pthread_t get_tid();
+		const int get_state();
+		const int get_job_count();
+		// mutex and condition variable functions
 		void lock();
 		void unlock();
 		void signal();
 		void wait();
+		// add a job to the job queue
 		void add_job(Job* job);
-		void run();
-		const int get_state();
-		const int get_job_count();
-		void set_abort();
+		// the actual function run by the thread
 		static void* start_routine(void* args);
+		// the thread is created here
+		void run();
+		// the thread runs this function
 		void execute();
 	private:
 		pthread_mutex_t queue_lock;
@@ -42,7 +49,9 @@ class Thread
 		int state;
 		int job_count;
 		bool is_abort;
+		// the actual thread id
 		pthread_t tid;
+		// my own thread id
 		int thread_id;
 };
 
