@@ -1,8 +1,8 @@
 /*
  * @Author: JackyLrd 
  * @Date: 2018-04-18 03:28:17 
- * @Last Modified by:   JackyLrd 
- * @Last Modified time: 2018-04-18 03:28:17 
+ * @Last Modified by: JackyLrd
+ * @Last Modified time: 2018-04-18 14:38:30
  */
 #ifndef ThreadPool_H_
 #define ThreadPool_H_
@@ -14,10 +14,10 @@
 #include "Job.hpp"
 #include "Thread.hpp"
 
-const int INIT = 0;
-const int RUNNING = 1;
-const int TERMINATING = 2;
-const int TERMINATED = 3;
+const int POOL_INIT = 0;
+const int POOL_RUNNING = 1;
+const int POOL_TERMINATING = 2;
+const int POOL_TERMINATED = 3;
 
 class ThreadPool
 {

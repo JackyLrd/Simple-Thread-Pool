@@ -2,15 +2,15 @@
 
 ThreadPool::ThreadPool(int thread_num)
 {
-	state = INIT;
+	state = POOL_INIT;
 	max_thread_num = thread_num;
 	threads = new Thread[thread_num];
-	for (unsigned long long i = 0; i < max_thread_num; ++i)
+	for (int i = 0; i < max_thread_num; ++i)
 	{
-		threads[i].set_tid((pthread_t)i);
+		threads[i].set_id(i);
 		threads[i].run();
 	}
-	state = RUNNING;
+	state = POOL_RUNNING;
 }
 
 void ThreadPool::add_job(Job* job)
@@ -21,7 +21,7 @@ void ThreadPool::add_job(Job* job)
 
 void ThreadPool::terminate()
 {
-	state = TERMINATING;
+	state = POOL_TERMINATING;
 
 	for (unsigned long long i = 0; i < max_thread_num; ++i)
 	{
@@ -36,7 +36,7 @@ void ThreadPool::terminate()
 	if (threads)
 		delete[] threads;
 
-	state = TERMINATED;
+	state = POOL_TERMINATED;
 }
 
 void ThreadPool::show_thread_state()
@@ -45,7 +45,7 @@ void ThreadPool::show_thread_state()
 	for (int i = 0; i < max_thread_num; ++i)
 	{
 		count += threads[i].get_job_count();
-		printf("thread 0x%lu finished %d jobs, state is %d\n", threads[i].get_tid(), threads[i].get_job_count(), threads[i].get_state());
+		printf("thread %d finished %d jobs\n", threads[i].get_id(), threads[i].get_job_count());
 	}
 	printf("%d jobs finished.\n", count);
 }

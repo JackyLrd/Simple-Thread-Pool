@@ -1,8 +1,8 @@
 /*
  * @Author: JackyLrd 
  * @Date: 2018-04-18 03:28:35 
- * @Last Modified by:   JackyLrd 
- * @Last Modified time: 2018-04-18 03:28:35 
+ * @Last Modified by: JackyLrd
+ * @Last Modified time: 2018-04-18 14:51:56
  */
 #ifndef Thread_H_
 #define Thread_H_
@@ -12,16 +12,18 @@
 #include <cstdio>
 #include "Job.hpp"
 
-const int IDLE = 0;
-const int WORKING = 1;
-const int WAITING = 2;
-const int EXIT = 3;
+const int THREAD_IDLE = 0;
+const int THREAD_WORKING = 1;
+const int THREAD_WAITING = 2;
+const int THREAD_EXIT = 3;
 
 class Thread
 {
 	public:
 		Thread();
-		void set_tid(pthread_t tid);
+		void set_id(int id);
+		const int get_id();
+		const pthread_t get_tid();
 		void lock();
 		void unlock();
 		void signal();
@@ -30,7 +32,6 @@ class Thread
 		void run();
 		const int get_state();
 		const int get_job_count();
-		const pthread_t get_tid();
 		void set_abort();
 		static void* start_routine(void* args);
 		void execute();
@@ -42,6 +43,7 @@ class Thread
 		int job_count;
 		bool is_abort;
 		pthread_t tid;
+		int thread_id;
 };
 
 #endif

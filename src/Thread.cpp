@@ -4,15 +4,25 @@ Thread::Thread()
 {
 	pthread_mutex_init(&queue_lock, NULL);
 	pthread_cond_init(&queue_ready, NULL);
-	state = IDLE;
+	state = THREAD_IDLE;
 	job_count = 0;
 	is_abort = false;
-	tid = 0;
+	thread_id = 0;
 }
 
-void Thread::set_tid(pthread_t tid)
+void Thread::set_id(int id)
 {
-	this->tid = tid;
+	thread_id = id;
+}
+
+const int Thread::get_id()
+{
+	return thread_id;
+}
+
+const pthread_t Thread::get_tid()
+{
+	return tid;
 }
 
 void Thread::lock()
@@ -58,11 +68,6 @@ const int Thread::get_job_count()
 	return job_count;
 }
 
-const pthread_t Thread::get_tid()
-{
-	return tid;
-}
-
 void Thread::set_abort()
 {
 	is_abort = true;
@@ -81,9 +86,9 @@ void Thread::execute()
 	while (1)
 	{
 		lock();
-		assert(state == IDLE);
-		state = WAITING;
-		// printf("thread 0x%lu is waiting for a job.\n", tid);
+		assert(state == THREAD_IDLE);
+		state = THREAD_WAITING;
+		// printf("thread %d is waiting for a job.\n", thread_id);
 		while (job_queue.empty() && !is_abort)
 		{
 			wait();
@@ -95,7 +100,7 @@ void Thread::execute()
 			break;
 		}
 
-		// printf("thread 0x%lu starts working.\n", tid);
+		// printf("thread %d starts working.\n", thread_id);
 		assert(!job_queue.empty());
 
 		Job* job = job_queue.front();
@@ -103,20 +108,20 @@ void Thread::execute()
 		
 		unlock();
 
-		assert(state == WAITING);
-		state = WORKING;
+		assert(state == THREAD_WAITING);
+		state = THREAD_WORKING;
 
 		job->run();
-		// printf("thread 0x%lu's job finished.\n", tid);
+		// printf("thread %d's job finished.\n", thread_id);
 		++job_count;
 		delete job;
 
-		assert(state == WORKING);
-		state = IDLE;
+		assert(state == THREAD_WORKING);
+		state = THREAD_IDLE;
 	}
 
-	state = EXIT;
-	printf("thread 0x%lu exits.\n", tid);
+	state = THREAD_EXIT;
+	printf("thread %d exits.\n", thread_id);
 	pthread_mutex_destroy(&queue_lock);
 	pthread_cond_destroy(&queue_ready);
 	pthread_exit(NULL);
